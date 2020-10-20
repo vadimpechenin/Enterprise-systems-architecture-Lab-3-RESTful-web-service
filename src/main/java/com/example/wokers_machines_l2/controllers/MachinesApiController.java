@@ -26,7 +26,7 @@ public class MachinesApiController {
 
     // Получить запись по id
     @GetMapping("machines/{id}")
-    public ResponseEntity<Machine> getEmployeeById(@PathVariable(value = "id") Long machineId)
+    public ResponseEntity<Machine> getMachineById(@PathVariable(value = "id") Long machineId)
             throws NotFoundException {
         Machine machine = machineRepository.findById(machineId)
                 .orElseThrow(() -> new NotFoundException("Станок не находится по этому id :: " + machineId));
@@ -51,7 +51,7 @@ public class MachinesApiController {
     }
 
     //удалить запись
-    @DeleteMapping("employees/{id}")
+    @DeleteMapping("machines/{id}")
     public Map<String, Boolean> deleteMachine(@PathVariable Long id)
             throws NotFoundException {
         Machine machine = machineRepository.findById(id)
