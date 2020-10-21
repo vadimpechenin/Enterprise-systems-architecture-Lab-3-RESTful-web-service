@@ -1,5 +1,8 @@
 package com.example.wokers_machines_l2.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -34,6 +37,8 @@ public class Machine {
     }
 
     @OneToMany(mappedBy = "machine", cascade = {CascadeType.ALL})
+    @JsonManagedReference
+    @JsonIgnore
     public List<Worker> getWorkers() {
         return workers;
     }

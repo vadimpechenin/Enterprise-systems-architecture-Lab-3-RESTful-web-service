@@ -1,5 +1,8 @@
 package com.example.wokers_machines_l2.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -39,6 +42,7 @@ public class Worker {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = {CascadeType.ALL})
     @JoinColumn(name = "mashine_id")
+
     public Machine getMachine() {
         return machine;
     }
