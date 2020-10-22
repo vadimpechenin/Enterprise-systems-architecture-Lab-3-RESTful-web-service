@@ -25,7 +25,9 @@ public class MachinesApiController {
     // Получить все записи
     @GetMapping("xml")
     private List<Machine> getMachinesXml() {
-        return this.machineRepository.findAll();
+        List<Machine> output = new ArrayList<Machine>();
+        output = this.machineRepository.findAll();
+        return output;
     }
 
     // Получить запись по id

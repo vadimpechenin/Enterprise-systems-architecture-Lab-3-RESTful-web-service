@@ -8,5 +8,5 @@ import java.util.List;
 @Repository
 public interface WorkerRepository extends JpaRepository<Worker, Integer> {
 
-    List<Worker> findWorkerByFullName(String fullName); //метод поиска в базе данных по имени
+    //List<Worker> findWorkerByFullName(String fullName); //метод поиска в базе данных по имени
 }

@@ -3,6 +3,7 @@ package com.example.wokers_machines_l2.controllers;
 
 import com.example.wokers_machines_l2.entity.Machine;
 import com.example.wokers_machines_l2.entity.Worker;
+
 import com.example.wokers_machines_l2.repository.WorkerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.wokers_machines_l2.exception.NotFoundException;
@@ -11,6 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.wokers_machines_l2.hateoas.WorkerResourse;
+import org.springframework.hateoas.RepresentationModel;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,12 +30,28 @@ public class WorkersApiController {
     // Получить все записи
     @GetMapping("xml")
     private List<Worker> getWorkersXml() {
-        return this.workerRepository.findAll();
+        List<Worker> output = new ArrayList<Worker>();
+        List<Worker> output2 = new ArrayList<Worker>();
+        output = this.workerRepository.findAll();
+        output2.add(output.get(0));
+        return output;
     }
 
     // Получить запись по id
+    /*@GetMapping("xml/{id}")
+    public List<Worker> getWorkerByIdXml(@PathVariable(value = "personnelNumber") int workerId){
+        List<Worker> output = new ArrayList<Worker>();
+        List<Worker> output2 = new ArrayList<Worker>();
+        output = this.workerRepository.findAll();
+        output2.add(output.get(workerId - 1));
+
+
+        return output2;
+
+    }*/
     @GetMapping("xml/{id}")
     public ResponseEntity<Worker> getWorkerByIdXml(@PathVariable(value = "personnelNumber") int workerId)
+
             throws NotFoundException {
         Worker worker = workerRepository.findById(workerId)
                 .orElseThrow(() -> new NotFoundException("Рабочий не находится по этому id :: " + workerId));
