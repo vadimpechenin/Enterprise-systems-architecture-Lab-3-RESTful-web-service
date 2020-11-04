@@ -12,9 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.wokers_machines_l2.hateoas.WorkerResourse;
-import org.springframework.hateoas.RepresentationModel;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
