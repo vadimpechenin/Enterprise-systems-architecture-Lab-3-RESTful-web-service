@@ -2,7 +2,9 @@ package com.example.wokers_machines_l2.controllers;
 
 import com.example.wokers_machines_l2.entity.Machine;
 import com.example.wokers_machines_l2.entity.MachineList;
+import com.example.wokers_machines_l2.entity.Worker;
 import com.example.wokers_machines_l2.repository.MachineRepository;
+import com.example.wokers_machines_l2.repository.WorkerRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.wokers_machines_l2.exception.NotFoundException;
@@ -23,7 +25,8 @@ public class MachinesApiController extends XmlController {
     @Autowired // его средства для получения bean-компонента под названием user Repository, который автоматически
     // создается Spring, мы будем использовать его для обработки данных
     MachineRepository machineRepository;
-
+    @Autowired
+    WorkerRepository workerRepository;
     // В формате xml
     // Получить все записи
     @GetMapping("xml")
@@ -35,7 +38,7 @@ public class MachinesApiController extends XmlController {
 
     // Получить запись по id
     @GetMapping("xml/{id}")
-    public ResponseEntity<String> getMachineByIdXml(@PathVariable(value = "id") Long machineId)
+    public ResponseEntity<String> getMachineByIdXml(@PathVariable(value = "id") Integer machineId)
             throws NotFoundException, JsonProcessingException {
         Machine machine = machineRepository.findById(machineId)
                 .orElseThrow(() -> new NotFoundException("Станок не находится по этому id :: " + machineId));
@@ -53,7 +56,7 @@ public class MachinesApiController extends XmlController {
     // Обновить запись
     @PutMapping("xml/{id}")
     @ResponseBody
-    public ResponseEntity<Machine> updateMachineXml(@PathVariable Long id, @Validated @RequestBody Machine machineDetails)
+    public ResponseEntity<Machine> updateMachineXml(@PathVariable Integer id, @Validated @RequestBody Machine machineDetails)
             throws NotFoundException {
         Machine machine = machineRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Станок не находится по этому id :: " + id));
@@ -65,11 +68,18 @@ public class MachinesApiController extends XmlController {
     //удалить запись
     @DeleteMapping("xml/{id}")
     @ResponseBody
-    public Map<String, Boolean> deleteMachineXml(@PathVariable Long id)
+    public Map<String, Boolean> deleteMachineXml(@PathVariable Integer id)
             throws NotFoundException {
         Machine machine = machineRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Станок не находится по этому idd :: " + id));
 
+        List<Worker> workers = workerRepository.findAll();
+        workers.forEach(worker -> {
+            if (worker.getMachine().getId().equals(machine.getId())) {
+                worker.setMachine(null);
+                workerRepository.save(worker);
+            }
+        });
         machineRepository.delete(machine);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
@@ -91,7 +101,7 @@ public class MachinesApiController extends XmlController {
     //@GetMapping("{id}")
     @RequestMapping(value="{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Machine> getMachineById(@PathVariable(value = "id") Long machineId)
+    public ResponseEntity<Machine> getMachineById(@PathVariable(value = "id") Integer machineId)
             throws NotFoundException {
         Machine machine = machineRepository.findById(machineId)
                 .orElseThrow(() -> new NotFoundException("Станок не находится по этому id :: " + machineId));
@@ -110,7 +120,7 @@ public class MachinesApiController extends XmlController {
     //@PutMapping("{id}")
     @RequestMapping(value="{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Machine> updateMachine(@PathVariable Long id, @Validated @RequestBody Machine machineDetails)
+    public ResponseEntity<Machine> updateMachine(@PathVariable Integer id, @Validated @RequestBody Machine machineDetails)
             throws NotFoundException {
         Machine machine = machineRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Станок не находится по этому id :: " + id));
@@ -123,11 +133,18 @@ public class MachinesApiController extends XmlController {
     //@DeleteMapping("{id}")
     @RequestMapping(value="{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Map<String, Boolean> deleteMachine(@PathVariable Long id)
+    public Map<String, Boolean> deleteMachine(@PathVariable Integer id)
             throws NotFoundException {
         Machine machine = machineRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Станок не находится по этому idd :: " + id));
 
+        List<Worker> workers = workerRepository.findAll();
+        workers.forEach(worker -> {
+            if (worker.getMachine().getId().equals(machine.getId())) {
+                worker.setMachine(null);
+                workerRepository.save(worker);
+            }
+        });
         machineRepository.delete(machine);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);

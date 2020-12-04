@@ -9,16 +9,16 @@ import java.util.Objects;
 @Entity
 @Table(schema = "public", name = "worker")
 public class Worker {
-    private int personnelNumber;
+    private Integer personnelNumber;
     private String fullName;
-    private int category;
+    private Integer category;
     private Machine machine;
     public Worker() {
     }
 
     @Id
     @Column(name = "personnel_number", nullable = false)
-    public int getPersonnelNumber() {
+    public Integer getPersonnelNumber() {
         return personnelNumber;
     }
 
@@ -32,23 +32,17 @@ public class Worker {
     }
 
     public void setFullName(String fullName) {
+
         this.fullName = fullName;
     }
 
     @Column(name = "category", nullable = false)
-    public int getCategory() { return category; }
-
-    public void setCategory(int category) { this.category = category; }
-
-    @ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = {CascadeType.ALL})
-    @JoinColumn(name = "mashine_id")
-
-    public Machine getMachine() {
-        return machine;
+    public Integer getCategory() {
+        return category;
     }
 
-    public void setMachine(Machine machine) {
-        this.machine = machine;
+    public void setCategory(int category) {
+        this.category = category;
     }
 
     @Override
@@ -58,7 +52,18 @@ public class Worker {
         Worker worker = (Worker) o;
         return personnelNumber == worker.personnelNumber &&
                 Objects.equals(fullName, worker.fullName) &&
-                category == worker.category;
+                category.equals(worker.category);
     }
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "mashine_id")
+    public Machine getMachine() {
+        return machine;
+    }
+
+    public void setMachine(Machine machine) {
+        this.machine = machine;
+    }
+
 
 }

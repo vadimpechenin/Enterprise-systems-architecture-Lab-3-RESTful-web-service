@@ -60,13 +60,14 @@ public class WorkersApiController extends XmlController{
     @PostMapping("xml")
     @ResponseBody
     public Worker addWorkerXml(@RequestBody Worker worker) {
-        return workerRepository.save(worker);
+        Worker created = workerRepository.save(worker);
+        return created;
     }
 
     // Обновить запись
     @PutMapping("xml/{id}")
     @ResponseBody
-    public ResponseEntity<Worker> updateWorkerXml(@PathVariable int personnelNumber, @Validated @RequestBody Worker workerDetails)
+    public ResponseEntity<Worker> updateWorkerXml(@PathVariable(value = "id") int personnelNumber, @Validated @RequestBody Worker workerDetails)
             throws NotFoundException {
         Worker worker = workerRepository.findById(personnelNumber)
                 .orElseThrow(() -> new NotFoundException("Рабочий не находится по этому id :: " + personnelNumber));
@@ -80,7 +81,7 @@ public class WorkersApiController extends XmlController{
     //удалить запись
     @DeleteMapping("xml/{id}")
     @ResponseBody
-    public Map<String, Boolean> deleteMachineXml(@PathVariable int personnelNumber)
+    public Map<String, Boolean> deleteMachineXml(@PathVariable(value = "id") int personnelNumber)
             throws NotFoundException {
         Worker worker = workerRepository.findById(personnelNumber)
                 .orElseThrow(() -> new NotFoundException("Рабочий не находится по этому idd :: " + personnelNumber));
@@ -118,9 +119,9 @@ public class WorkersApiController extends XmlController{
     }
 
     // Обновить запись
-    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Worker> updateWorker(@PathVariable int personnelNumber, @Validated @RequestBody Worker workerDetails)
+    public ResponseEntity<Worker> updateWorker(@PathVariable(value = "id") int personnelNumber, @Validated @RequestBody Worker workerDetails)
             throws NotFoundException {
         Worker worker = workerRepository.findById(personnelNumber)
                 .orElseThrow(() -> new NotFoundException("Рабочий не находится по этому id :: " + personnelNumber));
@@ -132,9 +133,9 @@ public class WorkersApiController extends XmlController{
     }
 
     //удалить запись
-    @RequestMapping(value="{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Map<String, Boolean> deleteMachine(@PathVariable int personnelNumber)
+    public Map<String, Boolean> deleteMachine(@PathVariable(value = "id") int personnelNumber)
             throws NotFoundException {
         Worker worker = workerRepository.findById(personnelNumber)
                 .orElseThrow(() -> new NotFoundException("Рабочий не находится по этому idd :: " + personnelNumber));

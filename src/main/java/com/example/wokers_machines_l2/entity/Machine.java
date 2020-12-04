@@ -10,7 +10,7 @@ import java.util.Objects;
 @Entity
 @Table(schema = "public", name = "machine")
 public class Machine {
-    private long id;
+    private Integer id;
     private String type;
     private List<Worker> workers;
 
@@ -19,11 +19,11 @@ public class Machine {
 
     @Id
     @Column(name = "id", nullable = false)
-    public long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -36,7 +36,7 @@ public class Machine {
         this.type = type;
     }
 
-    @OneToMany(mappedBy = "machine", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "machine")
     @JsonManagedReference
     @JsonIgnore
     public List<Worker> getWorkers() {
